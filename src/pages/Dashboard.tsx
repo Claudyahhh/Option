@@ -125,11 +125,12 @@ export function Dashboard() {
   }
 
   return (
-    <div className="p-8 lg:p-12 space-y-10 overflow-y-auto max-h-screen">
-      <header className="flex justify-between items-end gap-6 flex-wrap">
+    <div className="h-screen overflow-y-auto px-5 py-6 sm:px-7 sm:py-8 lg:px-8 xl:px-10 2xl:px-12">
+      <div className="mx-auto w-full max-w-[1480px] space-y-8 lg:space-y-10">
+      <header className="flex items-center justify-between gap-5 flex-wrap">
         <div className="space-y-2">
           <div className="flex items-center gap-3 flex-wrap">
-            <span className="text-5xl font-serif text-[#2D2D2D]">
+            <span className="text-4xl sm:text-5xl font-serif text-[#2D2D2D]">
               {phaseInfo ? `D${phaseInfo.cycleDay}` : d.option}
             </span>
             {phaseInfo && (
@@ -140,9 +141,9 @@ export function Dashboard() {
           </div>
           <p className="text-[#2D2D2D]/40 font-mono text-sm tracking-widest uppercase">{dateStr}</p>
         </div>
-        <div className="flex items-center gap-4 flex-wrap">
+        <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
           {weather && (
-            <div className="flex items-center gap-3 rounded-2xl bg-white border border-[#2D2D2D]/8 px-4 py-3">
+            <div className="flex items-center gap-3 rounded-2xl bg-white/90 border border-[#2D2D2D]/8 px-4 py-2.5 shadow-sm">
               <CloudSun className="w-5 h-5 text-[#D85A30]" />
               <div>
                 <div className="flex items-center gap-2 text-sm font-bold">
@@ -277,20 +278,20 @@ export function Dashboard() {
       {/* Report */}
       <AnimatePresence>
         {report && phaseInfo && !showSleepGate && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 lg:space-y-8">
 
-            {/* Top grid: curve card (2/3) + snapshot card (1/3) */}
-            <div className="grid lg:grid-cols-3 gap-8">
+            {/* Primary briefing + current-state index */}
+            <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_19rem] 2xl:grid-cols-[minmax(0,1fr)_21rem]">
 
               {/* Curve card */}
-              <div className="lg:col-span-2 bg-white rounded-[40px] border border-[#2D2D2D]/5 p-8 md:p-10 space-y-6 relative overflow-hidden">
+              <div className="min-w-0 bg-white rounded-[28px] border border-[#2D2D2D]/5 p-5 sm:p-7 lg:p-8 space-y-6 relative overflow-hidden shadow-[0_18px_50px_rgba(45,45,45,0.06)]">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-[#ADCBE3] rounded-full blur-3xl opacity-20 -mr-32 -mt-32" />
 
                 {/* Status + edge */}
-                <div className="flex justify-between items-start gap-4 relative z-10 flex-wrap">
+                <div className="flex flex-col sm:flex-row justify-between items-start gap-5 relative z-10">
                   <div className="space-y-2 flex-1 min-w-0">
                     <h3 className="text-[10px] font-black tracking-[0.3em] text-[#2D2D2D]/40 uppercase">{d.hormones}</h3>
-                    <p className="text-lg font-medium leading-snug text-[#2D2D2D]/85">{report.statusLine}</p>
+                    <p className="text-lg sm:text-xl font-medium leading-snug text-[#2D2D2D]/85">{report.statusLine}</p>
                     <p className="text-[13px] text-[#2D2D2D]/50 leading-relaxed">{report.continuityNote}</p>
                     {report.hormones && (
                       <div className="flex gap-2 flex-wrap pt-1">
@@ -300,10 +301,12 @@ export function Dashboard() {
                       </div>
                     )}
                   </div>
-                  <div className="text-right flex-shrink-0">
-                    <p className="text-[10px] font-black tracking-widest uppercase mb-1" style={{ color: accent }}>{report.edge.name}</p>
-                    <p className="text-5xl font-serif">{report.edge.pct}%</p>
-                    <div className="mt-2 w-24 h-1.5 bg-[#2D2D2D]/5 rounded-full overflow-hidden ml-auto">
+                  <div className="w-full sm:w-auto text-left sm:text-right flex-shrink-0">
+                    <div className="flex items-end justify-between gap-4 sm:block">
+                      <p className="text-[10px] font-black tracking-widest uppercase mb-1" style={{ color: accent }}>{report.edge.name}</p>
+                      <p className="text-4xl sm:text-5xl font-serif">{report.edge.pct}%</p>
+                    </div>
+                    <div className="mt-2 w-full sm:w-24 h-1.5 bg-[#2D2D2D]/5 rounded-full overflow-hidden sm:ml-auto">
                       <motion.div
                         initial={{ width: 0 }} animate={{ width: `${report.edge.pct}%` }}
                         transition={{ duration: 1, ease: 'easeOut' }}
@@ -330,39 +333,51 @@ export function Dashboard() {
 
               {/* Snapshot card */}
               {report.snapshot && (
-                <div className="space-y-3">
-                  <p className="text-[10px] font-black tracking-[0.2em] text-[#2D2D2D]/40 uppercase">
-                    {lang === 'zh' ? '今日状态' : "Today's State"}
-                  </p>
-                  {(lang === 'zh' ? [
-                    { key: '精力', value: report.snapshot.energy, accent: '#D85A30', bg: '#FAECE7' },
-                    { key: '体温', value: report.snapshot.temp,   accent: '#534AB7', bg: '#EEEDFE' },
-                    { key: '体重', value: report.snapshot.weight, accent: '#085041', bg: '#E1F5EE' },
-                    { key: '皮肤', value: report.snapshot.skin,   accent: '#FF8CAF', bg: '#FFF0F7' },
-                    { key: '情绪', value: report.snapshot.mood,   accent: '#854F0B', bg: '#FAEEDA' },
-                  ] : [
-                    { key: 'Energy', value: report.snapshot.energy, accent: '#D85A30', bg: '#FAECE7' },
-                    { key: 'Temp',   value: report.snapshot.temp,   accent: '#534AB7', bg: '#EEEDFE' },
-                    { key: 'Weight', value: report.snapshot.weight, accent: '#085041', bg: '#E1F5EE' },
-                    { key: 'Skin',   value: report.snapshot.skin,   accent: '#FF8CAF', bg: '#FFF0F7' },
-                    { key: 'Mood',   value: report.snapshot.mood,   accent: '#854F0B', bg: '#FAEEDA' },
-                  ]).map((row, idx) => (
-                    <motion.div key={row.key}
-                      initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.06 }}
-                      className="rounded-[20px] px-5 py-4"
-                      style={{ backgroundColor: row.bg }}
-                    >
-                      <p className="text-[9px] font-black tracking-widest uppercase mb-1" style={{ color: row.accent }}>{row.key}</p>
-                      <p className="text-[12px] leading-snug text-[#2D2D2D]/70">{row.value}</p>
-                    </motion.div>
-                  ))}
-                </div>
+                <aside className="bg-white/92 rounded-[28px] border border-[#2D2D2D]/7 p-5 sm:p-6 shadow-[0_18px_50px_rgba(45,45,45,0.05)]">
+                  <div className="flex items-end justify-between gap-4 pb-5 border-b border-[#2D2D2D]/7">
+                    <div>
+                      <p className="text-[10px] font-black tracking-[0.2em] text-[#2D2D2D]/40 uppercase">
+                        {lang === 'zh' ? '今日状态' : "Today's State"}
+                      </p>
+                      <p className="mt-1 font-serif text-xl text-[#2D2D2D]/85">
+                        {lang === 'zh' ? '身体信号索引' : 'Body signal index'}
+                      </p>
+                    </div>
+                    <span className="font-mono text-[10px] text-[#2D2D2D]/30">05</span>
+                  </div>
+                  <div className="grid gap-x-5 gap-y-5 pt-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-1">
+                    {(lang === 'zh' ? [
+                      { key: '精力', value: report.snapshot.energy, accent: '#D85A30' },
+                      { key: '体温', value: report.snapshot.temp,   accent: '#534AB7' },
+                      { key: '体重', value: report.snapshot.weight, accent: '#085041' },
+                      { key: '皮肤', value: report.snapshot.skin,   accent: '#FF8CAF' },
+                      { key: '情绪', value: report.snapshot.mood,   accent: '#854F0B' },
+                    ] : [
+                      { key: 'Energy', value: report.snapshot.energy, accent: '#D85A30' },
+                      { key: 'Temp',   value: report.snapshot.temp,   accent: '#534AB7' },
+                      { key: 'Weight', value: report.snapshot.weight, accent: '#085041' },
+                      { key: 'Skin',   value: report.snapshot.skin,   accent: '#FF8CAF' },
+                      { key: 'Mood',   value: report.snapshot.mood,   accent: '#854F0B' },
+                    ]).map((row, idx) => (
+                      <motion.div
+                        key={row.key}
+                        initial={{ opacity: 0, x: 8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        className="min-w-0 border-l-2 pl-3 py-0.5"
+                        style={{ borderColor: row.accent }}
+                      >
+                        <p className="text-[9px] font-black tracking-widest uppercase mb-1" style={{ color: row.accent }}>{row.key}</p>
+                        <p className="text-[12px] leading-relaxed text-[#2D2D2D]/65">{row.value}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </aside>
               )}
             </div>
 
             {/* 4 pillar cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               {pillars.map((p, i) => {
                 const Icon = p.icon;
                 const isOpen = openPillar === i;
@@ -474,6 +489,7 @@ export function Dashboard() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </div>
   );
 }
@@ -528,7 +544,7 @@ function HormoneCurve({ cycleDay, cycleLength }: { cycleDay: number; cycleLength
   const ty = Math.max(4, Math.min(96, testosteroneY(tx)));
 
   return (
-    <div className="h-44 w-full relative bg-[#F9F7F2]/50 rounded-[28px] p-6 border border-[#2D2D2D]/5 overflow-hidden">
+    <div className="h-40 sm:h-44 w-full relative bg-[#F9F7F2]/50 rounded-[22px] sm:rounded-[28px] p-4 sm:p-6 border border-[#2D2D2D]/5 overflow-hidden">
       {/* Phase band labels */}
       <div className="absolute inset-x-0 bottom-2 flex text-[8px] font-bold tracking-widest opacity-20 px-6">
         {[['RESET','#085041'],['RISE','#D85A30'],['PEAK','#FF8CAF'],['FOCUS','#534AB7'],['RESET','#085041']].map(([l,c],i) => (
@@ -545,7 +561,7 @@ function HormoneCurve({ cycleDay, cycleLength }: { cycleDay: number; cycleLength
         <circle cx={tx} cy={ty} r="3.5" fill="#D85A30" opacity="0.65" />
       </svg>
       {/* Legend */}
-      <div className="absolute top-3 right-4 flex gap-3 text-[9px] font-bold opacity-40">
+      <div className="absolute top-3 right-4 flex gap-2 sm:gap-3 text-[8px] sm:text-[9px] font-bold opacity-40">
         <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[#FF8CAF] inline-block rounded" />{d.estrogen}</span>
         <span className="flex items-center gap-1"><span className="w-3 h-0.5 border-t border-dashed border-[#534AB7] inline-block" style={{ width: 12 }} />{d.progesterone}</span>
         <span className="flex items-center gap-1"><span className="w-3 h-0.5 border-t border-dashed border-[#D85A30] inline-block" style={{ width: 12 }} />{d.testosterone}</span>
@@ -591,7 +607,7 @@ function SynergyStrip({ currentPhase, lang }: { currentPhase: string; lang: stri
       <p className="text-[9px] font-black tracking-[0.22em] text-[#2D2D2D]/30 uppercase">
         {lang === 'zh' ? '激素协同' : 'Hormone Synergy'}
       </p>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {SYNERGY_DATA.map(item => {
           const isCurrent = item.phase === currentPhase;
           return (

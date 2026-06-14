@@ -30,7 +30,7 @@ export function Sidebar({ currentPage, onNavigate }: SidebarProps) {
   ];
 
   return (
-    <aside className="hidden md:flex w-64 border-r border-[#2D2D2D]/10 bg-[#F9F7F2]/60 backdrop-blur-md p-8 flex-col gap-10 z-10 flex-shrink-0">
+    <aside className="hidden md:flex w-56 xl:w-64 border-r border-[#2D2D2D]/10 bg-[#F9F7F2]/72 backdrop-blur-md px-6 py-7 xl:p-8 flex-col gap-8 xl:gap-10 z-10 flex-shrink-0">
       <div className="flex items-center px-2 gap-3">
         <div className="w-8 h-8 bg-[#FF8CAF] rounded-full flex items-center justify-center">
           <Flame className="w-4 h-4 text-white" />
@@ -71,9 +71,9 @@ export function Sidebar({ currentPage, onNavigate }: SidebarProps) {
               key={item.id}
               onClick={() => onNavigate(item.id)}
               className={`
-                flex items-center gap-3.5 px-4 py-3 rounded-2xl transition-all duration-300 text-left
+                flex items-center gap-3.5 px-4 py-3 rounded-xl transition-all duration-300 text-left
                 ${isActive
-                  ? 'bg-[#FF8CAF] text-white shadow-lg shadow-[#FF8CAF]/20 translate-x-1'
+                  ? 'bg-[#FF8CAF] text-white shadow-md shadow-[#FF8CAF]/18'
                   : 'hover:bg-[#FF8CAF]/10 text-[#2D2D2D]/60 hover:text-[#2D2D2D]'
                 }
               `}
