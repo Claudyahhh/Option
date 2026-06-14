@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Share2, Zap, Activity, Smile, Wind, ChevronDown, ChevronUp } from 'lucide-react';
+import {
+  Share2, Zap, Activity, Smile, Wind, ChevronDown, ChevronUp,
+  CloudSun, Droplets, MapPin,
+} from 'lucide-react';
 import { useAppState, setTodayLog, getTodayLog, getYesterdayLog, updateLogDebrief } from '../lib/store';
 import { getCycleDay, getPhaseInfo, getAgeBracket, getTodayStr, getYesterdayStr } from '../lib/cycleEngine';
 import { ShareModal } from '../components/ShareModal';
 import { getReportContent } from '../lib/contentLibrary';
 import { useT, useLang } from '../lib/i18n';
+import { fetchCurrentWeather, getWeatherLabel } from '../lib/weather';
 import type { ReportContent, PhaseInfo } from '../lib/types';
+import type { CurrentWeather } from '../lib/weather';
 
 const PHASE_COLORS: Record<string, { bg: string; text: string; sub: string; badge: string }> = {
   RISE:  { bg: '#FAECE7', text: '#712B13', sub: '#993C1D', badge: 'bg-[#D85A30] text-white' },
@@ -33,6 +38,7 @@ export function Dashboard() {
   const [openPillar, setOpenPillar] = useState<number | null>(null);
   const [openWhy, setOpenWhy] = useState<number | null>(null);
   const [showShare, setShowShare] = useState(false);
+  const [weather, setWeather] = useState<CurrentWeather | null>(null);
 
   // Yesterday's debrief state
   const [yesterdayLog, setYesterdayLog] = useState(() => getYesterdayLog());
@@ -57,6 +63,20 @@ export function Dashboard() {
     setYesterdayLog(yLog);
     setYesterdayDebriefDone(!!yLog?.debriefRating);
   }, [profile, lang]);
+
+  useEffect(() => {
+    const city = profile.city.trim();
+    if (!city) return;
+
+    const controller = new AbortController();
+    fetchCurrentWeather(city, lang, controller.signal)
+      .then(setWeather)
+      .catch(error => {
+        if (error instanceof Error && error.name !== 'AbortError') setWeather(null);
+      });
+
+    return () => controller.abort();
+  }, [profile.city, lang]);
 
   const generateReport = () => {
     const day = getCycleDay(profile.periodDate, profile.cycleLength);
@@ -106,7 +126,7 @@ export function Dashboard() {
 
   return (
     <div className="p-8 lg:p-12 space-y-10 overflow-y-auto max-h-screen">
-      <header className="flex justify-between items-end">
+      <header className="flex justify-between items-end gap-6 flex-wrap">
         <div className="space-y-2">
           <div className="flex items-center gap-3 flex-wrap">
             <span className="text-5xl font-serif text-[#2D2D2D]">
@@ -120,12 +140,38 @@ export function Dashboard() {
           </div>
           <p className="text-[#2D2D2D]/40 font-mono text-sm tracking-widest uppercase">{dateStr}</p>
         </div>
-        <button
-          onClick={() => report && setShowShare(true)}
-          className={`flex items-center gap-2 transition-colors font-medium text-sm ${report ? 'text-[#2D2D2D]/60 hover:text-[#2D2D2D]' : 'text-[#2D2D2D]/20 cursor-default'}`}
-        >
-          <Share2 className="w-4 h-4" /> {d.share.label}
-        </button>
+        <div className="flex items-center gap-4 flex-wrap">
+          {weather && (
+            <div className="flex items-center gap-3 rounded-2xl bg-white border border-[#2D2D2D]/8 px-4 py-3">
+              <CloudSun className="w-5 h-5 text-[#D85A30]" />
+              <div>
+                <div className="flex items-center gap-2 text-sm font-bold">
+                  <span>{Math.round(weather.temperature)}°C</span>
+                  <span className="text-[#2D2D2D]/45 font-medium">
+                    {getWeatherLabel(weather.weatherCode, lang)}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 text-[10px] text-[#2D2D2D]/40 mt-0.5">
+                  <span className="flex items-center gap-1">
+                    <MapPin className="w-3 h-3" /> {weather.city}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Droplets className="w-3 h-3" /> {weather.humidity}%
+                  </span>
+                  <span>
+                    {lang === 'zh' ? '体感' : 'Feels'} {Math.round(weather.apparentTemperature)}°
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+          <button
+            onClick={() => report && setShowShare(true)}
+            className={`flex items-center gap-2 transition-colors font-medium text-sm ${report ? 'text-[#2D2D2D]/60 hover:text-[#2D2D2D]' : 'text-[#2D2D2D]/20 cursor-default'}`}
+          >
+            <Share2 className="w-4 h-4" /> {d.share.label}
+          </button>
+        </div>
       </header>
 
       {/* Yesterday's debrief — shown if yesterday's log exists and not yet debriefed */}

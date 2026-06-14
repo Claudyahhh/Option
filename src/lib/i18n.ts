@@ -139,6 +139,7 @@ export const T = {
         ],
       },
       errors: {
+        noCity:            'Please enter your city so Option can load local weather.',
         noPeriodDate:      'Please select your last period start date.',
         invalidCycleLength:'Cycle length must be between 21–45 days.',
         invalidAge:        'Please enter a valid age.',
@@ -507,6 +508,7 @@ export const T = {
         ],
       },
       errors: {
+        noCity:            '请输入所在城市，以便 Option 获取当地天气。',
         noPeriodDate:      '请选择你上次月经的开始日期。',
         invalidCycleLength:'周期长度必须在 21–45 天之间。',
         invalidAge:        '请输入有效的年龄。',

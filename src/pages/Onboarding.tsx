@@ -46,6 +46,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
 
   const validate = () => {
     if (step === 1) {
+      if (!form.city.trim()) { setError(o.errors.noCity); return false; }
       if (!form.periodDate) { setError(o.errors.noPeriodDate); return false; }
       if (form.cycleLength < 21 || form.cycleLength > 45) { setError(o.errors.invalidCycleLength); return false; }
       if (form.age < 18 || form.age > 55) { setError(o.errors.invalidAge); return false; }
@@ -65,7 +66,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
     if (!validate()) return;
     if (step < totalSteps) { setStep(s => s + 1); return; }
     const profile: UserProfile = {
-      city:        form.city || o.fields.cityPlaceholder,
+      city:        form.city.trim(),
       periodDate:  form.periodDate,
       cycleLength: form.cycleLength,
       age:         form.age,
