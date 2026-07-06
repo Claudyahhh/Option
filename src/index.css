@@ -24,6 +24,367 @@ body {
   min-height: 100vh;
 }
 
+.dashboard-page {
+  height: 100vh;
+  overflow-y: auto;
+  padding: clamp(1rem, 2vw, 2rem) clamp(1rem, 3vw, 4rem);
+}
+
+.dashboard-inner {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vh, 2.25rem);
+}
+
+.dashboard-header {
+  display: block;
+}
+
+.dashboard-header-main {
+  display: grid;
+  grid-template-columns: max-content minmax(300px, 420px) max-content;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(0.75rem, 1.5vw, 1.5rem);
+}
+
+.dashboard-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.dashboard-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.dashboard-day-title {
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  line-height: 1;
+}
+
+.dashboard-body-text {
+  font-size: clamp(0.875rem, 1.1vw, 1rem);
+}
+
+.dashboard-phase-badge {
+  padding: clamp(0.35rem, 0.6vw, 0.5rem) clamp(0.75rem, 1vw, 1.25rem);
+  font-size: clamp(0.65rem, 0.8vw, 0.8rem);
+}
+
+.dashboard-weather-card {
+  padding: clamp(0.6rem, 0.9vw, 0.875rem) clamp(0.75rem, 1.2vw, 1.25rem);
+}
+
+.dashboard-action-pill {
+  padding: clamp(0.55rem, 0.9vw, 0.75rem) clamp(0.8rem, 1.4vw, 1.5rem);
+  font-size: clamp(0.875rem, 1vw, 1rem);
+}
+
+.dashboard-header-meta {
+  justify-self: center;
+  width: min(100%, 420px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 14px;
+  padding: 11px 14px;
+  border-radius: 24px;
+  background: rgba(250, 251, 252, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  box-shadow: 0 10px 28px rgba(45, 45, 45, 0.045);
+  backdrop-filter: blur(12px);
+}
+
+.dashboard-header-meta .space-y-1 {
+  min-width: 0;
+  padding: 0;
+  border-left: 0;
+  padding-left: 0;
+}
+
+.dashboard-header-meta .space-y-1:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.dashboard-header-meta p:first-child {
+  font-size: clamp(0.55rem, 0.65vw, 0.64rem);
+  letter-spacing: 0.1em;
+}
+
+.dashboard-header-meta p:last-child {
+  font-size: clamp(0.8rem, 0.88vw, 0.9rem);
+  line-height: 1.18;
+  color: #2D2D2D;
+}
+
+.dashboard-report {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vh, 2rem);
+}
+
+.cycle-dot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7px, 1fr));
+  gap: 2px;
+}
+
+.cycle-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.cycle-dot-future {
+  opacity: 0.25;
+}
+
+.cycle-dot-past {
+  opacity: 0.6;
+}
+
+.cycle-dot-today {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.cycle-dot:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.sidebar-edge-card {
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #FFF5F0, #FFE8E0);
+  border: 1px solid rgba(184, 84, 42, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.sidebar-edge-label {
+  margin-bottom: 10px;
+  color: rgba(45, 45, 45, 0.58);
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.sidebar-edge-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-bottom: 8px;
+  color: #B8542A;
+  opacity: 0.78;
+}
+
+.sidebar-edge-quote {
+  color: #2A2A2A;
+  font-size: clamp(0.875rem, 0.95vw, 0.9375rem);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.dashboard-primary-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 20rem);
+  align-items: stretch;
+  gap: clamp(1rem, 1.7vw, 2rem);
+  min-height: 0;
+}
+
+.dashboard-curve-card {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 1.8vh, 1.75rem);
+  padding: clamp(1.25rem, 2vw, 2.5rem);
+  min-height: 0;
+}
+
+.dashboard-status-line {
+  font-size: clamp(1rem, 1.4vw, 1.35rem);
+}
+
+.dashboard-edge-value {
+  font-size: clamp(2.25rem, 4vw, 3.75rem);
+  line-height: 0.95;
+}
+
+.hormone-curve-panel {
+  flex: 1;
+  min-height: 0;
+  height: clamp(14rem, 31vh, 21rem);
+}
+
+.dashboard-snapshot-card {
+  padding: clamp(1.25rem, 1.8vw, 2rem);
+  min-height: 0;
+}
+
+.dashboard-snapshot-title {
+  font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+  line-height: 1.15;
+}
+
+.dashboard-snapshot-grid {
+  display: grid;
+  gap: 10px;
+  padding-top: clamp(1rem, 1.8vh, 1.5rem);
+}
+
+.dashboard-snapshot-item {
+  min-width: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(45, 45, 45, 0.035);
+}
+
+.dashboard-snapshot-item-label {
+  font-size: clamp(0.75rem, 0.9vw, 0.875rem);
+  line-height: 1;
+  font-weight: 600;
+}
+
+.dashboard-snapshot-item-copy {
+  margin-top: 6px;
+  color: #5A5A5A;
+  font-size: clamp(0.8rem, 0.95vw, 0.9rem);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.dashboard-below-fold {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.85rem, 1.5vh, 1.25rem);
+}
+
+.hormone-synergy-card {
+  padding: clamp(1.25rem, 2vw, 2rem);
+  font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.hormone-synergy-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.synergy-phase-card {
+  border: 1.5px solid rgba(45, 45, 45, 0.04);
+  padding: 16px 14px;
+  min-width: 0;
+}
+
+.synergy-phase-name {
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.synergy-metrics {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: clamp(0.875rem, 1vw, 1rem);
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.synergy-arrow {
+  font-size: 1.12em;
+  margin-left: 1px;
+}
+
+.synergy-description {
+  display: -webkit-box;
+  margin-top: 8px;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: #5A5A5A;
+  font-size: clamp(0.75rem, 0.9vw, 0.875rem);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.dashboard-meta-card {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 2rem);
+  padding: 14px 20px;
+}
+
+@media (min-width: 1280px) {
+  .dashboard-primary-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(19rem, 22rem);
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .dashboard-page {
+    padding: clamp(0.85rem, 1.5vw, 1.25rem);
+  }
+
+  .dashboard-inner {
+    gap: 0.85rem;
+  }
+
+  .dashboard-primary-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 18rem);
+    gap: 1rem;
+  }
+
+  .dashboard-curve-card,
+  .dashboard-snapshot-card {
+    border-radius: 26px;
+  }
+
+  .hormone-curve-panel {
+    height: clamp(12rem, 30vh, 16rem);
+  }
+}
+
+@media (max-width: 1023px) {
+  .dashboard-header-main {
+    flex-wrap: wrap;
+  }
+
+  .dashboard-header-meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-primary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-meta-card {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .dashboard-page {
+    padding: 1rem 1rem 5.5rem;
+  }
+
+  .hormone-synergy-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 /* Collage Paper Texture Effect */
 .paper-card {
   background-color: var(--color-paper);
@@ -79,4 +440,54 @@ body {
 }
 .input-field::placeholder {
   color: rgba(45, 45, 45, 0.3);
+}
+
+.input-field-with-icon {
+  padding-left: 2.9rem;
+}
+
+.calendar-icon-button {
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 0.75rem;
+  color: rgba(45, 45, 45, 0.5);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(45, 45, 45, 0.07);
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.calendar-icon-button:hover {
+  color: #2D2D2D;
+  background: #fff;
+}
+
+.plan-field {
+  min-width: 0;
+}
+
+.plan-field > span {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(45, 45, 45, 0.4);
+}
+
+.plan-field > input {
+  width: 100%;
+  height: 2.75rem;
+  min-width: 0;
+  padding: 0 0.65rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(45, 45, 45, 0.1);
+  background: #fff;
+  color: #2D2D2D;
+  font-size: 0.75rem;
+  outline: none;
 }

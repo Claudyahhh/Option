@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Share2, Zap, Activity, Smile, Wind, ChevronDown, ChevronUp,
-  CloudSun, Droplets, MapPin,
+  Check, CloudSun, Droplets, MapPin,
 } from 'lucide-react';
-import { useAppState, setTodayLog, getTodayLog, getYesterdayLog, updateLogDebrief } from '../lib/store';
+import { useAppState, setTodayLog, getTodayLog, getYesterdayLog, updateLogDebrief, updateProfile } from '../lib/store';
 import { getCycleDay, getPhaseInfo, getAgeBracket, getTodayStr, getYesterdayStr } from '../lib/cycleEngine';
 import { ShareModal } from '../components/ShareModal';
 import { getReportContent } from '../lib/contentLibrary';
@@ -30,6 +30,7 @@ export function Dashboard() {
   const [lang] = useLang();
   const profile = state.profile!;
   const d = t.dashboard;
+  const profileT = t.profile;
 
   const [sleepInput, setSleepInput] = useState(7);
   const [showSleepGate, setShowSleepGate] = useState(true);
@@ -39,6 +40,7 @@ export function Dashboard() {
   const [openWhy, setOpenWhy] = useState<number | null>(null);
   const [showShare, setShowShare] = useState(false);
   const [weather, setWeather] = useState<CurrentWeather | null>(null);
+  const [periodLogged, setPeriodLogged] = useState(false);
 
   // Yesterday's debrief state
   const [yesterdayLog, setYesterdayLog] = useState(() => getYesterdayLog());
@@ -93,6 +95,14 @@ export function Dashboard() {
     updateLogDebrief(yDate, rating);
     setYesterdayDebriefDone(true);
     setYesterdayLog(prev => prev ? { ...prev, debriefRating: rating } : prev);
+  };
+
+  const handlePeriodToday = () => {
+    if (window.confirm(profileT.periodConfirm)) {
+      updateProfile({ periodDate: getTodayStr() });
+      setPeriodLogged(true);
+      setTimeout(() => setPeriodLogged(false), 3000);
+    }
   };
 
   const today = new Date();
@@ -166,6 +176,27 @@ export function Dashboard() {
               </div>
             </div>
           )}
+          <AnimatePresence mode="wait">
+            {periodLogged ? (
+              <motion.div
+                key="period-logged"
+                initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
+                className="flex items-center gap-2 px-5 py-2.5 bg-[#E1F5EE] text-[#085041] rounded-full text-sm font-bold"
+              >
+                <Check className="w-4 h-4" /> {profileT.cycleUpdated}
+              </motion.div>
+            ) : (
+              <motion.button
+                key="period-button"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                onClick={handlePeriodToday}
+                className="flex items-center gap-2 px-5 py-2.5 bg-[#E1F5EE] text-[#085041] rounded-full text-sm font-bold hover:shadow-md transition-all border border-[#085041]/10"
+              >
+                <Droplets className="w-4 h-4" />
+                {profileT.periodToday}
+              </motion.button>
+            )}
+          </AnimatePresence>
           <button
             onClick={() => report && setShowShare(true)}
             className={`flex items-center gap-2 transition-colors font-medium text-sm ${report ? 'text-[#2D2D2D]/60 hover:text-[#2D2D2D]' : 'text-[#2D2D2D]/20 cursor-default'}`}

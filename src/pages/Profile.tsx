@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { RotateCcw, User, Target, Utensils, Activity, Pencil, Check, X, Droplets } from 'lucide-react';
+import { motion } from 'motion/react';
+import { RotateCcw, User, Target, Utensils, Activity, Pencil, Check, X } from 'lucide-react';
 import { useAppState, resetApp, updateProfile } from '../lib/store';
 import { getCycleDay, getPhaseInfo, getAgeBracket, getTodayStr } from '../lib/cycleEngine';
 import { useT } from '../lib/i18n';
@@ -14,7 +14,6 @@ export function Profile({ onReset }: { onReset: () => void }) {
   const p = t.profile;
   const profile = state.profile;
   const [isEditing, setIsEditing] = useState(false);
-  const [periodLogged, setPeriodLogged] = useState(false);
   const [editForm, setEditForm] = useState({
     periodDate: profile?.periodDate ?? '',
     cycleLength: profile?.cycleLength ?? 28,
@@ -43,14 +42,6 @@ export function Profile({ onReset }: { onReset: () => void }) {
     }
   };
 
-  const handlePeriodToday = () => {
-    if (window.confirm(p.periodConfirm)) {
-      updateProfile({ periodDate: getTodayStr() });
-      setPeriodLogged(true);
-      setTimeout(() => setPeriodLogged(false), 3000);
-    }
-  };
-
   const startEdit = () => {
     setEditForm({
       periodDate: profile.periodDate,
@@ -75,29 +66,6 @@ export function Profile({ onReset }: { onReset: () => void }) {
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           <LangToggle />
-          {/* Period start quick-log */}
-          <AnimatePresence mode="wait">
-            {periodLogged ? (
-              <motion.div
-                key="logged"
-                initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
-                className="flex items-center gap-2 px-5 py-3 bg-[#E1F5EE] text-[#085041] rounded-full text-sm font-bold"
-              >
-                <Check className="w-4 h-4" /> {p.cycleUpdated}
-              </motion.div>
-            ) : (
-              <motion.button
-                key="button"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                onClick={handlePeriodToday}
-                className="flex items-center gap-2 px-5 py-3 bg-[#E1F5EE] text-[#085041] rounded-full text-sm font-bold hover:shadow-md transition-all border border-[#085041]/10"
-              >
-                <Droplets className="w-4 h-4" />
-                {p.periodToday}
-              </motion.button>
-            )}
-          </AnimatePresence>
-
           {/* Edit toggle */}
           {!isEditing ? (
             <button

@@ -1,14 +1,22 @@
-import { Home, User, Flame, Droplets } from 'lucide-react';
+import { Home, User, CalendarDays, Sparkles } from 'lucide-react';
 import { Page } from '../App';
 import { useAppState } from '../lib/store';
 import { getCycleDay, getPhaseInfo } from '../lib/cycleEngine';
-import { useT, useLang } from '../lib/i18n';
+import { useT } from '../lib/i18n';
+import logoMark from '../assets/option-logo-mark.svg';
 
 const PHASE_BADGE: Record<string, string> = {
   RISE:  'bg-[#D85A30]/10 text-[#D85A30]',
   PEAK:  'bg-[#FF8CAF]/20 text-[#FF8CAF]',
   FOCUS: 'bg-[#534AB7]/10 text-[#534AB7]',
   RESET: 'bg-[#085041]/10 text-[#085041]',
+};
+
+const PHASE_DOT_COLORS: Record<string, string> = {
+  RISE: '#B8632A',
+  PEAK: '#A8344A',
+  FOCUS: '#5B4B8A',
+  RESET: '#2D7A52',
 };
 
 interface SidebarProps {
@@ -23,41 +31,68 @@ export function Sidebar({ currentPage, onNavigate }: SidebarProps) {
 
   const cycleDay  = profile ? getCycleDay(profile.periodDate, profile.cycleLength) : null;
   const phaseInfo = profile && cycleDay ? getPhaseInfo(cycleDay, profile.cycleLength) : null;
+  const ovulationDay = profile ? Math.max(1, profile.cycleLength - 14) : null;
+  const cycleDots = profile
+    ? Array.from({ length: profile.cycleLength }, (_, i) => {
+        const day = i + 1;
+        const info = getPhaseInfo(day, profile.cycleLength);
+        return {
+          day,
+          phase: info.phase,
+          phase6: info.phase6,
+          isPast: cycleDay ? day < cycleDay : false,
+          isToday: cycleDay === day,
+        };
+      })
+    : [];
 
   const items = [
     { id: 'dashboard' as Page, label: t.nav.today,   icon: Home },
+    { id: 'plan'      as Page, label: t.nav.plan,    icon: CalendarDays },
     { id: 'profile'   as Page, label: t.nav.profile, icon: User },
   ];
 
   return (
-    <aside className="hidden md:flex w-56 xl:w-64 border-r border-[#2D2D2D]/10 bg-[#F9F7F2]/72 backdrop-blur-md px-6 py-7 xl:p-8 flex-col gap-8 xl:gap-10 z-10 flex-shrink-0">
+    <aside className="hidden md:flex w-[220px] border-r border-[#2D2D2D]/10 bg-[#F9F7F2]/72 backdrop-blur-md px-6 py-7 flex-col gap-8 z-10 flex-shrink-0">
       <div className="flex items-center px-2 gap-3">
-        <div className="w-8 h-8 bg-[#FF8CAF] rounded-full flex items-center justify-center">
-          <Flame className="w-4 h-4 text-white" />
+        <div className="w-9 h-9 rounded-2xl border border-white/70 bg-white/45 shadow-[0_8px_22px_rgba(45,45,45,0.08)] backdrop-blur flex items-center justify-center">
+          <img src={logoMark} alt="Option" className="w-6 h-6" />
         </div>
         <span className="font-serif text-2xl font-bold tracking-tight">Option</span>
       </div>
 
       {/* Phase indicator */}
       {phaseInfo && (
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           <p className="text-[10px] font-black tracking-widest text-[#2D2D2D]/30 uppercase px-2">
             {t.sidebar.currentPhase}
           </p>
           <div className={`px-3 py-2 rounded-2xl text-xs font-bold tracking-widest ${PHASE_BADGE[phaseInfo.phase]}`}>
-            {phaseInfo.phase6} · D{phaseInfo.dayInPhase}/{phaseInfo.totalDaysInPhase}
+            <div className="flex items-center justify-between gap-2">
+              <span>{phaseInfo.phase6} · D{phaseInfo.dayInPhase}/{phaseInfo.totalDaysInPhase}</span>
+              <span className="text-[10px] opacity-70">D{phaseInfo.cycleDay} / {profile!.cycleLength}</span>
+            </div>
           </div>
-          <div className="px-2">
-            <div className="h-1 bg-[#2D2D2D]/5 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-[#FF8CAF] rounded-full transition-all duration-1000"
-                style={{ width: `${((cycleDay! - 1) / (profile!.cycleLength - 1)) * 100}%` }}
-              />
-            </div>
-            <div className="flex justify-between text-[9px] text-[#2D2D2D]/30 mt-1">
-              <span>{t.sidebar.dayLabel}1</span>
-              <span>{t.sidebar.dayLabel}{profile!.cycleLength}</span>
-            </div>
+          <div className="mx-2 rounded-xl border border-[#2D2D2D]/6 bg-white/45 px-2.5 py-2 text-[10px] leading-relaxed text-[#2D2D2D]/42">
+            <p className="font-bold text-[#2D2D2D]/55">{`你的周期：${profile!.cycleLength} 天`}</p>
+            <p>{`估算排卵锚点：D${ovulationDay}`}</p>
+            <p>每一天独立计算</p>
+          </div>
+          <div className="cycle-dot-grid px-2">
+            {cycleDots.map(dot => {
+              const color = PHASE_DOT_COLORS[dot.phase];
+              return (
+                <span
+                  key={dot.day}
+                  title={`D${dot.day} · ${dot.phase6}`}
+                  className={`cycle-dot ${dot.isToday ? 'cycle-dot-today' : dot.isPast ? 'cycle-dot-past' : 'cycle-dot-future'}`}
+                  style={{
+                    backgroundColor: color,
+                    boxShadow: dot.isToday ? `0 0 0 2px ${color}33` : undefined,
+                  }}
+                />
+              );
+            })}
           </div>
         </div>
       )}
@@ -86,11 +121,12 @@ export function Sidebar({ currentPage, onNavigate }: SidebarProps) {
       </nav>
 
       {/* Daily tip */}
-      <div className="paper-card p-4 rounded-2xl border border-[#2D2D2D]/5">
-        <p className="text-[9px] text-[#2D2D2D]/40 uppercase tracking-widest mb-2 font-black">
+      <div className="sidebar-edge-card">
+        <p className="sidebar-edge-label">
           {t.sidebar.todayEdge}
         </p>
-        <p className="text-xs italic text-[#2D2D2D]/70 font-serif leading-relaxed">
+        <Sparkles className="sidebar-edge-icon" />
+        <p className="sidebar-edge-quote font-serif">
           {phaseInfo
             ? t.phaseTips[phaseInfo.subPhase] ?? `"${phaseInfo.phase}."`
             : `"${t.sidebar.hormones}"`}
@@ -102,13 +138,12 @@ export function Sidebar({ currentPage, onNavigate }: SidebarProps) {
 
 // ── Mobile bottom navigation ──────────────────────────────────────────────────
 
-const NAV_ITEM_IDS: Page[] = ['dashboard', 'profile'];
-const NAV_ICONS = [Home, User];
+const NAV_ITEM_IDS: Page[] = ['dashboard', 'plan', 'profile'];
+const NAV_ICONS = [Home, CalendarDays, User];
 
 export function BottomNav({ currentPage, onNavigate }: SidebarProps) {
   const [state] = useAppState();
   const t = useT();
-  const [lang] = useLang();
   const profile = state.profile;
   const cycleDay  = profile ? getCycleDay(profile.periodDate, profile.cycleLength) : null;
   const phaseInfo = profile && cycleDay ? getPhaseInfo(cycleDay, profile.cycleLength) : null;
@@ -118,7 +153,7 @@ export function BottomNav({ currentPage, onNavigate }: SidebarProps) {
   };
   const accent = phaseInfo ? PHASE_ACCENT[phaseInfo.phase] : '#FF8CAF';
 
-  const navLabels = [t.nav.today, t.nav.profile];
+  const navLabels = [t.nav.today, t.nav.plan, t.nav.profile];
 
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#F9F7F2]/95 backdrop-blur-xl border-t border-[#2D2D2D]/8">
@@ -153,28 +188,6 @@ export function BottomNav({ currentPage, onNavigate }: SidebarProps) {
         <div className="absolute bottom-full left-0 right-0 h-0.5" style={{ backgroundColor: accent, opacity: 0.4 }} />
       )}
 
-      {/* Period quick-log FAB */}
-      {profile && (
-        <button
-          onClick={() => {
-            const msg = lang === 'zh' ? '将今天标记为月经第一天？' : 'Log today as the first day of your period?';
-            if (window.confirm(msg)) {
-              import('../lib/store').then(({ updateProfile }) => {
-                const d = new Date();
-                updateProfile({
-                  periodDate: d.getFullYear() + '-' +
-                    String(d.getMonth() + 1).padStart(2, '0') + '-' +
-                    String(d.getDate()).padStart(2, '0'),
-                });
-              });
-            }
-          }}
-          className="absolute -top-5 right-4 w-10 h-10 rounded-full bg-[#E1F5EE] border border-[#085041]/15 flex items-center justify-center shadow-md"
-          title={lang === 'zh' ? '今天月经来了' : 'Period started today'}
-        >
-          <Droplets className="w-4 h-4 text-[#085041]" />
-        </button>
-      )}
     </nav>
   );
 }

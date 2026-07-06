@@ -1,0 +1,18 @@
+<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="optionRing" x1="20" y1="18" x2="78" y2="78" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F29CAD"/>
+      <stop offset="0.52" stop-color="#F6B8C5"/>
+      <stop offset="1" stop-color="#8FB4C9"/>
+    </linearGradient>
+    <linearGradient id="optionPeak" x1="48" y1="60" x2="48" y2="78" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B9B5D2"/>
+      <stop offset="1" stop-color="#8FB4C9"/>
+    </linearGradient>
+  </defs>
+  <path
+    d="M48 14C30.6 14 20 29.7 20 48.7C20 67.8 31.2 82 48 82C64.8 82 76 67.8 76 48.7C76 29.7 65.4 14 48 14ZM48 18.5C61.2 18.5 66.5 32 66.5 49C66.5 65.9 60.8 78 48 78C35.2 78 29.5 65.9 29.5 49C29.5 32 34.8 18.5 48 18.5Z"
+    fill="url(#optionRing)"
+  />
+  <path d="M48 61L59 78H37L48 61Z" fill="url(#optionPeak)" />
+</svg>
