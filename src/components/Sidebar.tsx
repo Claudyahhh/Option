@@ -74,9 +74,9 @@ export function Sidebar({ currentPage, onNavigate }: SidebarProps) {
             </div>
           </div>
           <div className="mx-2 rounded-xl border border-[#2D2D2D]/6 bg-white/45 px-2.5 py-2 text-[10px] leading-relaxed text-[#2D2D2D]/42">
-            <p className="font-bold text-[#2D2D2D]/55">{`你的周期：${profile!.cycleLength} 天`}</p>
-            <p>{`估算排卵锚点：D${ovulationDay}`}</p>
-            <p>每一天独立计算</p>
+            <p className="font-bold text-[#2D2D2D]/55">{t.sidebar.cycleLength(profile!.cycleLength)}</p>
+            <p>{t.sidebar.estimatedOvulation(ovulationDay!)}</p>
+            <p>{t.sidebar.dailyCalculation}</p>
           </div>
           <div className="cycle-dot-grid px-2">
             {cycleDots.map(dot => {
@@ -191,3 +191,4 @@ export function BottomNav({ currentPage, onNavigate }: SidebarProps) {
     </nav>
   );
 }
+

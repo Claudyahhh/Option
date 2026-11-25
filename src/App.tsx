@@ -31,10 +31,10 @@ export default function App() {
   const showSidebar = currentPage !== 'landing' && currentPage !== 'onboarding';
 
   return (
-    <div className="h-screen flex overflow-hidden text-[#2D2D2D] font-sans selection:bg-[#FF8CAF]/30">
+    <div className="h-dvh flex overflow-hidden text-[#2D2D2D] font-sans selection:bg-[#FF8CAF]/30">
       {showSidebar && <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />}
 
-      <main className={`flex-1 relative overflow-hidden ${showSidebar ? 'pb-20 md:pb-0' : ''}`}>
+      <main className={`min-w-0 flex-1 relative overflow-hidden ${showSidebar ? 'pb-20 md:pb-0' : ''}`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={currentPage}
@@ -53,3 +53,4 @@ export default function App() {
     </div>
   );
 }
+
