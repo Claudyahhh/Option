@@ -157,160 +157,160 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
       <div className="onboarding-panel">
         <div className="onboarding-card mx-auto w-full max-w-[820px] rounded-[38px] border border-white/42 bg-white/36 shadow-[inset_0_1px_0_rgba(255,255,255,0.62),0_24px_64px_rgba(68,103,126,0.16)] backdrop-blur-2xl">
           <div ref={contentRef} className="onboarding-content space-y-4" role="region" aria-label={o.stepTitles[step - 1]} tabIndex={0}>
-          <div className="flex items-end justify-between gap-5 border-b border-white/36 pb-4">
-            <div className="min-w-0">
-              <p className="text-xs font-black uppercase tracking-[0.24em] text-[#30485A]/45">{panelCopy[step - 1].kicker}</p>
-              <h3 className="mt-2 text-2xl font-serif leading-tight text-[#172F42] sm:text-3xl">{panelCopy[step - 1].title}</h3>
-              <p className="mt-1 max-w-xl text-sm leading-relaxed text-[#30485A]/66">{panelCopy[step - 1].sub}</p>
+            <div className="flex items-end justify-between gap-5 border-b border-white/36 pb-4">
+              <div className="min-w-0">
+                <p className="text-xs font-black uppercase tracking-[0.24em] text-[#30485A]/45">{panelCopy[step - 1].kicker}</p>
+                <h3 className="mt-2 text-2xl font-serif leading-tight text-[#172F42] sm:text-3xl">{panelCopy[step - 1].title}</h3>
+                <p className="mt-1 max-w-xl text-sm leading-relaxed text-[#30485A]/66">{panelCopy[step - 1].sub}</p>
+              </div>
+              <div className="hidden rounded-full border border-white/44 bg-white/24 px-4 py-2 text-xs font-black tracking-[0.18em] text-[#30485A]/58 sm:block">
+                {String(step).padStart(2, '0')} / 03
+              </div>
             </div>
-            <div className="hidden rounded-full border border-white/44 bg-white/24 px-4 py-2 text-xs font-black tracking-[0.18em] text-[#30485A]/58 sm:block">
-              {String(step).padStart(2, '0')} / 03
-            </div>
-          </div>
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={step}
-              initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }}
-              transition={{ duration: 0.25 }}
-              className="space-y-4"
-            >
-              {step === 1 && (
-                <>
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div className="rounded-[28px] border border-white/45 bg-[linear-gradient(135deg,rgba(255,255,255,0.32),rgba(220,239,247,0.18))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.56)]">
-                      <Field label={o.fields.city}>
-                        <div className="relative">
-                          <MapPin className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#30485A]/38" />
-                          <input
-                            className="input-field input-field-with-icon bg-white/52 border-white/48"
-                            value={form.city}
-                            onChange={e => setForm(f => ({ ...f, city: e.target.value }))}
-                            placeholder={o.fields.cityPlaceholder}
-                          />
-                        </div>
-                        <div className="mt-2 grid grid-cols-4 gap-1.5">
-                          {CITY_SUGGESTIONS[isZh ? 'zh' : 'en'].map(city => (
-                            <button
-                              key={city}
-                              type="button"
-                              onClick={() => setForm(f => ({ ...f, city }))}
-                              className="whitespace-nowrap rounded-full border border-white/45 bg-white/34 px-1.5 py-1.5 text-[11px] font-semibold text-[#30485A]/72 transition-colors hover:bg-[#F6B8C5]/24"
-                            >
-                              {city}
-                            </button>
-                          ))}
-                        </div>
-                      </Field>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={step}
+                initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }}
+                transition={{ duration: 0.25 }}
+                className="space-y-4"
+              >
+                {step === 1 && (
+                  <>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="rounded-[28px] border border-white/45 bg-[linear-gradient(135deg,rgba(255,255,255,0.32),rgba(220,239,247,0.18))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.56)]">
+                        <Field label={o.fields.city}>
+                          <div className="relative">
+                            <MapPin className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#30485A]/38" />
+                            <input
+                              className="input-field input-field-with-icon bg-white/52 border-white/48"
+                              value={form.city}
+                              onChange={e => setForm(f => ({ ...f, city: e.target.value }))}
+                              placeholder={o.fields.cityPlaceholder}
+                            />
+                          </div>
+                          <div className="mt-2 grid grid-cols-4 gap-1.5">
+                            {CITY_SUGGESTIONS[isZh ? 'zh' : 'en'].map(city => (
+                              <button
+                                key={city}
+                                type="button"
+                                onClick={() => setForm(f => ({ ...f, city }))}
+                                className="whitespace-nowrap rounded-full border border-white/45 bg-white/34 px-1.5 py-1.5 text-[11px] font-semibold text-[#30485A]/72 transition-colors hover:bg-[#F6B8C5]/24"
+                              >
+                                {city}
+                              </button>
+                            ))}
+                          </div>
+                        </Field>
+                      </div>
+                      <div className="rounded-[28px] border border-white/45 bg-white/24 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
+                        <Field label={o.fields.periodDate}>
+                          <div className="relative">
+                            <CalendarDays className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#30485A]/38" />
+                            <input
+                              type="date"
+                              className="input-field input-field-with-icon bg-white/42 border-white/40"
+                              value={form.periodDate}
+                              max={getTodayStr()}
+                              onChange={e => setForm(f => ({ ...f, periodDate: e.target.value }))}
+                            />
+                          </div>
+                          <div className="mt-2 grid grid-cols-4 gap-1.5">
+                            {[
+                              { days: 0, label: isZh ? '今天' : 'Today' },
+                              { days: 7, label: isZh ? '7 天前' : '7d ago' },
+                              { days: 14, label: isZh ? '14 天前' : '14d ago' },
+                              { days: 28, label: isZh ? '28 天前' : '28d ago' },
+                            ].map(item => (
+                              <button
+                                key={item.days}
+                                type="button"
+                                onClick={() => setForm(f => ({ ...f, periodDate: dateDaysAgo(item.days) }))}
+                                className="whitespace-nowrap rounded-full border border-white/45 bg-white/30 px-1.5 py-1.5 text-[11px] font-semibold text-[#30485A]/72 transition-colors hover:bg-[#F6B8C5]/24"
+                              >
+                                {item.label}
+                              </button>
+                            ))}
+                          </div>
+                        </Field>
+                      </div>
                     </div>
-                    <div className="rounded-[28px] border border-white/45 bg-white/24 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
-                      <Field label={o.fields.periodDate}>
-                        <div className="relative">
-                          <CalendarDays className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#30485A]/38" />
-                          <input
-                            type="date"
-                            className="input-field input-field-with-icon bg-white/42 border-white/40"
-                            value={form.periodDate}
-                            max={getTodayStr()}
-                            onChange={e => setForm(f => ({ ...f, periodDate: e.target.value }))}
-                          />
-                        </div>
-                        <div className="mt-2 grid grid-cols-4 gap-1.5">
-                          {[
-                            { days: 0, label: isZh ? '今天' : 'Today' },
-                            { days: 7, label: isZh ? '7 天前' : '7d ago' },
-                            { days: 14, label: isZh ? '14 天前' : '14d ago' },
-                            { days: 28, label: isZh ? '28 天前' : '28d ago' },
-                          ].map(item => (
-                            <button
-                              key={item.days}
-                              type="button"
-                              onClick={() => setForm(f => ({ ...f, periodDate: dateDaysAgo(item.days) }))}
-                              className="whitespace-nowrap rounded-full border border-white/45 bg-white/30 px-1.5 py-1.5 text-[11px] font-semibold text-[#30485A]/72 transition-colors hover:bg-[#F6B8C5]/24"
-                            >
-                              {item.label}
-                            </button>
-                          ))}
-                        </div>
-                      </Field>
-                    </div>
-                  </div>
 
-                  <div className="grid gap-4 md:grid-cols-3">
-                    <div className="rounded-[28px] border border-white/45 bg-white/24 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
-                      <Field label={o.fields.cycleLength}>
-                        <NumberControl plain value={form.cycleLength} min={21} max={45} unit={o.fields.days} onChange={cycleLength => setForm(f => ({ ...f, cycleLength }))} />
-                      </Field>
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <div className="rounded-[28px] border border-white/45 bg-white/24 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
+                        <Field label={o.fields.cycleLength}>
+                          <NumberControl plain value={form.cycleLength} min={21} max={45} unit={o.fields.days} onChange={cycleLength => setForm(f => ({ ...f, cycleLength }))} />
+                        </Field>
+                      </div>
+                      <div className="rounded-[28px] border border-white/45 bg-white/24 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
+                        <Field label={o.fields.age}>
+                          <NumberControl plain icon={<UserRound className="h-4 w-4" />} value={form.age} min={18} max={55} onChange={age => setForm(f => ({ ...f, age }))} />
+                        </Field>
+                      </div>
+                      <div className="rounded-[28px] border border-white/45 bg-white/24 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
+                        <Field label={o.fields.lastSleep}>
+                          <NumberControl plain icon={<Moon className="h-4 w-4" />} value={form.sleepHours} min={3} max={12} step={0.5} unit={t.hours} onChange={sleepHours => setForm(f => ({ ...f, sleepHours }))} />
+                        </Field>
+                      </div>
                     </div>
-                    <div className="rounded-[28px] border border-white/45 bg-white/24 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
-                      <Field label={o.fields.age}>
-                        <NumberControl plain icon={<UserRound className="h-4 w-4" />} value={form.age} min={18} max={55} onChange={age => setForm(f => ({ ...f, age }))} />
-                      </Field>
-                    </div>
-                    <div className="rounded-[28px] border border-white/45 bg-white/24 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
-                      <Field label={o.fields.lastSleep}>
-                        <NumberControl plain icon={<Moon className="h-4 w-4" />} value={form.sleepHours} min={3} max={12} step={0.5} unit={t.hours} onChange={sleepHours => setForm(f => ({ ...f, sleepHours }))} />
-                      </Field>
-                    </div>
-                  </div>
-                </>
-              )}
+                  </>
+                )}
 
-              {step === 2 && (
-                <>
-                  <Field label={o.fitness.label}>
+                {step === 2 && (
+                  <>
+                    <Field label={o.fitness.label}>
+                      <OptionGrid
+                        options={o.fitness.options}
+                        value={form.fitness}
+                        onChange={v => setForm(f => ({ ...f, fitness: v as FitnessLevel }))}
+                        cols={2}
+                      />
+                    </Field>
+                    <Field label={o.objective.label}>
+                      <ObjectiveMultiGrid
+                        options={o.objective.options}
+                        value={form.objective}
+                        onChange={v => setForm(f => ({ ...f, objective: v }))}
+                      />
+                    </Field>
+                  </>
+                )}
+
+                {step === 3 && (
+                  <Field label={o.diet.label}>
                     <OptionGrid
-                      options={o.fitness.options}
-                      value={form.fitness}
-                      onChange={v => setForm(f => ({ ...f, fitness: v as FitnessLevel }))}
+                      options={o.diet.options}
+                      value={form.diet}
+                      onChange={v => setForm(f => ({ ...f, diet: v as Diet }))}
                       cols={2}
                     />
                   </Field>
-                  <Field label={o.objective.label}>
-                    <ObjectiveMultiGrid
-                      options={o.objective.options}
-                      value={form.objective}
-                      onChange={v => setForm(f => ({ ...f, objective: v }))}
-                    />
-                  </Field>
-                </>
-              )}
-
-              {step === 3 && (
-                <Field label={o.diet.label}>
-                  <OptionGrid
-                    options={o.diet.options}
-                    value={form.diet}
-                    onChange={v => setForm(f => ({ ...f, diet: v as Diet }))}
-                    cols={2}
-                  />
-                </Field>
-              )}
-            </motion.div>
-          </AnimatePresence>
+                )}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           <div className="onboarding-actions">
-          {error && (
-            <motion.p role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-3 rounded-2xl border border-[#F6B8C5]/35 bg-[#F6B8C5]/16 px-4 py-3 text-sm font-semibold text-[#A8344A]">
-              {error}
-            </motion.p>
-          )}
-
-          <div className="flex gap-3">
-            {step > 1 && (
-              <button onClick={back} className="flex items-center gap-2 rounded-full border border-white/44 bg-white/24 px-6 py-4 font-semibold text-[#30485A]/72 shadow-[inset_0_1px_0_rgba(255,255,255,0.54)] transition-all hover:bg-white/36">
-                <ChevronLeft className="w-4 h-4" /> {t.back}
-              </button>
+            {error && (
+              <motion.p role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-3 rounded-2xl border border-[#F6B8C5]/35 bg-[#F6B8C5]/16 px-4 py-3 text-sm font-semibold text-[#A8344A]">
+                {error}
+              </motion.p>
             )}
-            <button
-              onClick={next}
-              className="flex flex-1 items-center justify-center gap-3 rounded-full bg-[#172F42] py-5 text-lg font-bold text-[#FFF7FB] shadow-[0_14px_28px_rgba(23,47,66,0.22)] transition-all hover:bg-[#243746]"
-            >
-              {step < totalSteps ? t.continue : o.finishCta}
-              <ArrowRight className="w-5 h-5" />
-            </button>
-          </div>
+
+            <div className="flex gap-3">
+              {step > 1 && (
+                <button onClick={back} className="flex items-center gap-2 rounded-full border border-white/44 bg-white/24 px-6 py-4 font-semibold text-[#30485A]/72 shadow-[inset_0_1px_0_rgba(255,255,255,0.54)] transition-all hover:bg-white/36">
+                  <ChevronLeft className="w-4 h-4" /> {t.back}
+                </button>
+              )}
+              <button
+                onClick={next}
+                className="flex flex-1 items-center justify-center gap-3 rounded-full bg-[#172F42] py-5 text-lg font-bold text-[#FFF7FB] shadow-[0_14px_28px_rgba(23,47,66,0.22)] transition-all hover:bg-[#243746]"
+              >
+                {step < totalSteps ? t.continue : o.finishCta}
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
