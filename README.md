@@ -2,7 +2,7 @@
 
 **把女性生理周期从需要应对的障碍，转化为可以精准使用的生产力杠杆。**
 
-[直接使用网页版](https://option-livid.vercel.app)
+[直接使用网页版](https://option.claudyah.com)
 
 无需安装、无需 GitHub 账号、无需 API Key。
 
