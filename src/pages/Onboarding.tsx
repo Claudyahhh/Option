@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, CalendarDays, ChevronLeft, MapPin, Moon, UserRound } from 'lucide-react';
 import { setProfile, setTodayLog } from '../lib/store';
@@ -57,6 +57,11 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
     diet: '',
   });
   const [error, setError] = useState('');
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    contentRef.current?.scrollTo({ top: 0 });
+  }, [step]);
 
   const totalSteps = 3;
   const panelCopy = isZh ? [
@@ -107,23 +112,23 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
   const back = () => { setStep(s => s - 1); setError(''); };
 
   return (
-    <div className="min-h-screen overflow-y-auto bg-[#8fb4c9] bg-[radial-gradient(circle_at_14%_12%,rgba(246,184,197,0.32),transparent_32%),radial-gradient(circle_at_86%_82%,rgba(220,239,247,0.52),transparent_34%)] lg:h-screen lg:overflow-hidden">
+    <div className="onboarding-shell bg-[#8fb4c9] bg-[radial-gradient(circle_at_14%_12%,rgba(246,184,197,0.32),transparent_32%),radial-gradient(circle_at_86%_82%,rgba(220,239,247,0.52),transparent_34%)]">
       {/* Left panel */}
-      <div className="w-full lg:fixed lg:inset-y-0 lg:left-0 lg:w-[38%] p-6 sm:p-10 lg:p-14 flex flex-col justify-center gap-8">
-        <div className="rounded-[36px] border border-white/42 bg-[linear-gradient(135deg,rgba(255,255,255,0.28),rgba(220,239,247,0.18)_48%,rgba(246,184,197,0.2))] p-7 sm:p-9 shadow-[inset_0_1px_0_rgba(255,255,255,0.62),0_18px_48px_rgba(68,103,126,0.14)] backdrop-blur-2xl">
+      <div className="onboarding-intro">
+        <div className="onboarding-intro-card rounded-[36px] border border-white/42 bg-[linear-gradient(135deg,rgba(255,255,255,0.28),rgba(220,239,247,0.18)_48%,rgba(246,184,197,0.2))] shadow-[inset_0_1px_0_rgba(255,255,255,0.62),0_18px_48px_rgba(68,103,126,0.14)] backdrop-blur-2xl">
           <div className="flex items-start justify-between gap-5">
             <div className="space-y-3">
               <p className="text-xs font-bold tracking-[0.22em] text-[#30485A]/50 uppercase">
                 {o.step} {step} {o.of} {totalSteps}
               </p>
-              <h2 className="text-5xl font-serif leading-none text-[#172F42]">{o.stepTitles[step - 1]}</h2>
-              <p className="max-w-md leading-relaxed text-[#30485A]/72">{o.stepSubtitles[step - 1]}</p>
+              <h2 className="text-2xl lg:text-5xl font-serif leading-none text-[#172F42]">{o.stepTitles[step - 1]}</h2>
+              <p className="hidden lg:block max-w-md leading-relaxed text-[#30485A]/72">{o.stepSubtitles[step - 1]}</p>
             </div>
             <LangToggle className="flex-shrink-0 mt-1" />
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="onboarding-phase-cards grid-cols-2 gap-3">
           {PHASE_CARDS.map(phase => (
             <motion.div
               key={phase.name}
@@ -141,7 +146,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
         </div>
 
         {/* Progress dots */}
-        <div className="flex gap-2">
+        <div className="hidden lg:flex gap-2">
           {Array.from({ length: totalSteps }).map((_, i) => (
             <div key={i} className={`h-1.5 rounded-full transition-all duration-500 ${i < step ? 'bg-[#172F42] flex-[2]' : 'bg-white/38 flex-1'}`} />
           ))}
@@ -149,8 +154,9 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
       </div>
 
       {/* Right panel */}
-      <div className="flex min-h-screen flex-col justify-center p-6 pt-0 sm:p-10 lg:ml-[38%] lg:p-14">
-        <div className="mx-auto w-full max-w-[820px] space-y-4 rounded-[38px] border border-white/42 bg-white/36 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.62),0_24px_64px_rgba(68,103,126,0.16)] backdrop-blur-2xl sm:p-7">
+      <div className="onboarding-panel">
+        <div className="onboarding-card mx-auto w-full max-w-[820px] rounded-[38px] border border-white/42 bg-white/36 shadow-[inset_0_1px_0_rgba(255,255,255,0.62),0_24px_64px_rgba(68,103,126,0.16)] backdrop-blur-2xl">
+          <div ref={contentRef} className="onboarding-content space-y-4" role="region" aria-label={o.stepTitles[step - 1]} tabIndex={0}>
           <div className="flex items-end justify-between gap-5 border-b border-white/36 pb-4">
             <div className="min-w-0">
               <p className="text-xs font-black uppercase tracking-[0.24em] text-[#30485A]/45">{panelCopy[step - 1].kicker}</p>
@@ -282,14 +288,16 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
               )}
             </motion.div>
           </AnimatePresence>
+          </div>
 
+          <div className="onboarding-actions">
           {error && (
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl border border-[#F6B8C5]/35 bg-[#F6B8C5]/16 px-4 py-3 text-sm font-semibold text-[#A8344A]">
+            <motion.p role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-3 rounded-2xl border border-[#F6B8C5]/35 bg-[#F6B8C5]/16 px-4 py-3 text-sm font-semibold text-[#A8344A]">
               {error}
             </motion.p>
           )}
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-3">
             {step > 1 && (
               <button onClick={back} className="flex items-center gap-2 rounded-full border border-white/44 bg-white/24 px-6 py-4 font-semibold text-[#30485A]/72 shadow-[inset_0_1px_0_rgba(255,255,255,0.54)] transition-all hover:bg-white/36">
                 <ChevronLeft className="w-4 h-4" /> {t.back}
@@ -302,6 +310,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
               {step < totalSteps ? t.continue : o.finishCta}
               <ArrowRight className="w-5 h-5" />
             </button>
+          </div>
           </div>
         </div>
       </div>
@@ -440,3 +449,4 @@ function ObjectiveMultiGrid({ options, value, onChange }: {
     </div>
   );
 }
+

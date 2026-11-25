@@ -59,6 +59,9 @@ export const T = {
       todayEdge:    "Today's Edge",
       dayLabel:     'Day',
       hormones:     'Hormones are your leverage.',
+      cycleLength: (days: number) => `Your cycle: ${days} days`,
+      estimatedOvulation: (day: number) => `Estimated ovulation: D${day}`,
+      dailyCalculation: 'Calculated for each day',
     },
 
     // Phase tips
@@ -431,6 +434,9 @@ export const T = {
       todayEdge:    '今日优势',
       dayLabel:     '第',
       hormones:     '激素，是你的杠杆。',
+      cycleLength: (days: number) => `你的周期：${days} 天`,
+      estimatedOvulation: (day: number) => `估算排卵锚点：D${day}`,
+      dailyCalculation: '每一天独立计算',
     },
 
     phaseTips: {
@@ -778,3 +784,4 @@ export function useT(): Translations {
   // TypeScript: both branches have the same shape
   return (lang === 'zh' ? T.zh : T.en) as unknown as Translations;
 }
+
